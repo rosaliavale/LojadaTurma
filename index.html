@@ -96,7 +96,7 @@ if(!user)return{e:{_:'Entre na sua conta para continuar.'}};
 let url=d.img;
 if(url.startsWith('data:')){const b=await(await fetch(url)).blob(),path=`${user.id}/${Date.now()}.jpg`;
 const up=await sb.storage.from('product-images').upload(path,b,{contentType:'image/jpeg'});
-if(up.error)return{e:{_:'Erro no upload da imagem. Tente novamente.'}};
+if(up.error){console.error('Upload:',up.error);return{e:{_:'Erro no upload da imagem: '+up.error.message}}}
 url=sb.storage.from('product-images').getPublicUrl(path).data.publicUrl}
 const row={name:d.name,category:d.cat,description:d.desc,price:d.price,stock:d.stock,image_url:url};
 const q=id?await sb.from('products').update(row).eq('id',id).select():await sb.from('products').insert({...row,seller_name:d.seller,seller_email:d.email}).select();
